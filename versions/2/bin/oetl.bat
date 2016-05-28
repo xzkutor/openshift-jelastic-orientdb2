@@ -36,7 +36,7 @@ set TRUSTSTORE=%ORIENTDB_HOME%\config\cert\orientdb-console.ts
 set TRUSTSTORE_PASS=password
 set SSL_OPTS="-Dclient.ssl.enabled=false -Djavax.net.ssl.keyStore=%KEYSTORE% -Djavax.net.ssl.keyStorePassword=%KEYSTORE_PASS% -Djavax.net.ssl.trustStore=%TRUSTSTORE% -Djavax.net.ssl.trustStorePassword=%TRUSTSTORE_PASS%"
 
-set ORIENTDB_SETTINGS=-Xmx512m -Djava.util.logging.config.file="%ORIENTDB_HOME%\config\orientdb-client-log.properties" -Djava.awt.headless=true
-call %JAVA% -server %SSL_OPTS% %ORIENTDB_SETTINGS% -Dfile.encoding=utf-8 -Dorientdb.build.number="2.1.x@r${buildNumber}; 2016-01-07 10:51:24+0000" -cp "%ORIENTDB_HOME%\lib\*;" com.orientechnologies.orient.etl.OETLProcessor %CMD_LINE_ARGS%
+set ORIENTDB_SETTINGS=-XX:MaxDirectMemorySize=512g -Xmx512m -Djava.util.logging.config.file="%ORIENTDB_HOME%\config\orientdb-client-log.properties" -Djava.awt.headless=true
+call %JAVA% -server %SSL_OPTS% %ORIENTDB_SETTINGS% -Dfile.encoding=utf-8 -Dorientdb.build.number="develop@r79d281140b01c0bc3b566a46a64f1573cb359783; 2016-05-18 14:14:32+0000" -cp "%ORIENTDB_HOME%\lib\*;" com.orientechnologies.orient.etl.OETLProcessor %CMD_LINE_ARGS%
 
 :end

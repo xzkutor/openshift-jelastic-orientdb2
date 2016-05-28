@@ -31,12 +31,12 @@ echo                  `
 rem Guess ORIENTDB_HOME if not defined
 set CURRENT_DIR=%cd%
 
-if exist "%JAVA_HOME%\bin\java.exe" goto setJavaHome
+if exist "%JAVA_HOME:"=%\bin\java.exe" goto setJavaHome
 set JAVA=java
 goto okJava
 
 :setJavaHome
-set JAVA="%JAVA_HOME%\bin\java"
+set JAVA="%JAVA_HOME:"=%\bin\java"
 
 :okJava
 if not "%ORIENTDB_HOME%" == "" goto gotHome
@@ -69,13 +69,17 @@ if NOT exist "%CONFIG_FILE%" set CONFIG_FILE=%ORIENTDB_HOME%/config/orientdb-ser
 set LOG_FILE=%ORIENTDB_HOME%/config/orientdb-server-log.properties
 set WWW_PATH=%ORIENTDB_HOME%/www
 set ORIENTDB_SETTINGS=-Dprofiler.enabled=true
-set JAVA_OPTS_SCRIPT=-Xmx512m -Djna.nosys=true -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless=true -Dfile.encoding=UTF8 -Drhino.opt.level=9
+set JAVA_OPTS_SCRIPT=-Xmx512m -Djna.nosys=true -XX:MaxDirectMemorySize=512g -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless=true -Dfile.encoding=UTF8 -Drhino.opt.level=9
+
+rem TO DEBUG ORIENTDB SERVER RUN IT WITH THESE OPTIONS:
+rem -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044
+rem AND ATTACH TO THE CURRENT HOST, PORT 1044
 
 rem ORIENTDB MAXIMUM HEAP. USE SYNTAX -Xmx<memory>, WHERE <memory> HAS THE TOTAL MEMORY AND SIZE UNIT. EXAMPLE: -Xmx512m
 set MAXHEAP=-Xmx512m
 rem ORIENTDB MAXIMUM DISKCACHE IN MB, EXAMPLE: "-Dstorage.diskCache.bufferSize=8192" FOR 8GB of DISKCACHE
 set MAXDISKCACHE=
 
-call %JAVA% -server %JAVA_OPTS% %MAXHEAP% %JAVA_OPTS_SCRIPT% %ORIENTDB_SETTINGS% %MAXDISKCACHE% -Djava.util.logging.config.file="%LOG_FILE%" -Dorientdb.config.file="%CONFIG_FILE%" -Dorientdb.www.path="%WWW_PATH%" -Dorientdb.build.number="2.1.x@r${buildNumber}; 2016-01-07 10:51:24+0000" -cp "%ORIENTDB_HOME%\lib\*;" %CMD_LINE_ARGS% com.orientechnologies.orient.server.OServerMain
+call %JAVA% -server %JAVA_OPTS% %MAXHEAP% %JAVA_OPTS_SCRIPT% %ORIENTDB_SETTINGS% %MAXDISKCACHE% -Djava.util.logging.config.file="%LOG_FILE%" -Dorientdb.config.file="%CONFIG_FILE%" -Dorientdb.www.path="%WWW_PATH%" -Dorientdb.build.number="develop@r79d281140b01c0bc3b566a46a64f1573cb359783; 2016-05-18 14:14:32+0000" -cp "%ORIENTDB_HOME%\lib\*;%ORIENTDB_HOME%\plugins\*" %CMD_LINE_ARGS% com.orientechnologies.orient.server.OServerMain
 
 :end

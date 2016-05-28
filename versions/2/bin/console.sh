@@ -20,9 +20,9 @@ done
 PRGDIR=`dirname "$PRG"`
 
 # Only set ORIENTDB_HOME if not already set
-[ -f "$ORIENTDB_HOME"/lib/orientdb-tools-2.1.9.jar ] || ORIENTDB_HOME=`cd "$PRGDIR/.." ; pwd`
+[ -f "$ORIENTDB_HOME"/lib/orientdb-tools-2.2.0.jar ] || ORIENTDB_HOME=`cd "$PRGDIR/.." ; pwd`
 export ORIENTDB_HOME
-cd "$ORIENTDB_HOME/bin"
+
 
 # Set JavaHome if it exists
 if [ -f "${JAVA_HOME}/bin/java" ]; then 
@@ -32,7 +32,7 @@ else
 fi
 export JAVA
 
-ORIENTDB_SETTINGS="-Djava.util.logging.config.file=\"$ORIENTDB_HOME/config/orientdb-client-log.properties\" -Djava.awt.headless=true"
+ORIENTDB_SETTINGS="-XX:MaxDirectMemorySize=512g -Djava.util.logging.config.file=\"$ORIENTDB_HOME/config/orientdb-client-log.properties\" -Djava.awt.headless=true"
 #JAVA_OPTS=-Xmx1024m
 KEYSTORE="$ORIENTDB_HOME/config/cert/orientdb-console.ks"
 KEYSTORE_PASS=password
@@ -41,7 +41,7 @@ TRUSTSTORE_PASS=password
 SSL_OPTS="-Xmx512m -Dclient.ssl.enabled=false "
 
 exec "$JAVA" -client $JAVA_OPTS $ORIENTDB_SETTINGS $SSL_OPTS \
-    -Dfile.encoding=utf-8 -Dorientdb.build.number="2.1.x@r${buildNumber}; 2016-01-07 10:51:24+0000" \
-    -cp "$ORIENTDB_HOME/lib/orientdb-tools-2.1.9.jar:$ORIENTDB_HOME/lib/*:$ORIENTDB_HOME/plugins/*" \
+    -Dfile.encoding=utf-8 -Dorientdb.build.number="develop@r79d281140b01c0bc3b566a46a64f1573cb359783; 2016-05-18 14:14:32+0000" \
+    -cp "$ORIENTDB_HOME/lib/orientdb-tools-2.2.0.jar:$ORIENTDB_HOME/lib/*:$ORIENTDB_HOME/plugins/*" \
     "-Djavax.net.ssl.keyStore=$KEYSTORE" "-Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASS" "-Djavax.net.ssl.trustStore=$TRUSTSTORE" "-Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASS" \
     com.orientechnologies.orient.graph.console.OGremlinConsole $*
