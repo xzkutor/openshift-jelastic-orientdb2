@@ -84,21 +84,19 @@ fi
 # -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044
 # AND ATTACH TO THE CURRENT HOST, PORT 1044
 
-# ORIENTDB memory options, default to 512 of heap.
-
-if [ -z "$ORIENTDB_OPTS_MEMORY" ] ; then
-    ORIENTDB_OPTS_MEMORY="-Xms32M -Xmx1638M"
+if [ -e ./variablesparser.sh ]; then
+      . ./variablesparser.sh
 fi
+
 # ORIENTDB MAXIMUM DISKCACHE IN MB, EXAMPLE, ENTER -Dstorage.diskCache.bufferSize=8192 FOR 8GB
-MAXDISKCACHE=""
+let MAXDISKCACHE=$(free -m|grep Mem|awk '{print $2}')-67
 
 echo $$ > $ORIENTDB_PID
 
-exec "$JAVA" $JAVA_OPTS $ORIENTDB_OPTS_MEMORY $JAVA_OPTS_SCRIPT $ORIENTDB_SETTINGS $MAXDISKCACHE \
+exec "$JAVA" $JAVA_OPTS $JAVA_OPTS_SCRIPT $ORIENTDB_SETTINGS -Dstorage.diskCache.bufferSize=$MAXDISKCACHE \
     -Djava.util.logging.config.file="$LOG_FILE" \
     -Dorientdb.config.file="$CONFIG_FILE" \
     -Dorientdb.www.path="$WWW_PATH" \
     -Dorientdb.build.number="develop@r79d281140b01c0bc3b566a46a64f1573cb359783; 2016-05-18 14:14:32+0000" \
     -cp "$ORIENTDB_HOME/lib/orientdb-server-2.2.0.jar:$ORIENTDB_HOME/lib/*:$ORIENTDB_HOME/plugins/*" \
     $* com.orientechnologies.orient.server.OServerMain
-
