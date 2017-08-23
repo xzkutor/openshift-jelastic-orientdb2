@@ -93,7 +93,7 @@ let MAXDISKCACHE=$(free -m|grep Mem|awk '{print $2}')-67
 
 echo $$ > $ORIENTDB_PID
 
-exec "$JAVA" $JAVA_OPTS $JAVA_OPTS_SCRIPT $ORIENTDB_SETTINGS -Djava.net.preferIPv4Stack=true -Dstorage.diskCache.bufferSize=$MAXDISKCACHE \
+exec "$JAVA" $JAVA_OPTS $JAVA_OPTS_SCRIPT $ORIENTDB_SETTINGS -Djava.net.preferIPv4Stack=false -Dstorage.diskCache.bufferSize=$MAXDISKCACHE \
     -Djava.util.logging.config.file="$LOG_FILE" \
     -Dorientdb.config.file="$CONFIG_FILE" \
     -Dorientdb.www.path="$WWW_PATH" \
